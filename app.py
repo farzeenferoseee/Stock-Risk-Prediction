@@ -2,34 +2,6 @@ import streamlit as st
 import joblib
 import pandas as pd
 
-# Streamlit UI
-st.title("Stock Risk Prediction")
-st.write("Enter stock details, and we'll predict whether stock is overstocked or stockout.")
-
-#CSS for custom UI
-st.markdown("""
-    <style>
-        body {
-            background-color: #000000;
-            color: white;
-        }
-        .stTextArea textarea {
-            background-color: #1a1a1a;
-            color: white;
-        }
-        .stButton button {
-            background-color: #800080;
-            color: white;
-        }
-        .stSuccess {
-            background-color: #333333;
-            color: #adff2f;
-        }
-    </style>
-""", unsafe_allow_html=True)
-
-
-
 # Load the saved model, label map, and feature names
 try:
     model = joblib.load("lr_model.pkl")
@@ -44,26 +16,27 @@ st.title("Stock Risk Prediction")
 st.write("Enter stock details, and we'll predict whether stock is overstocked or stockout.")
 
 # Define the original categorical features
-original_categorical_features = ['season', 'item_category', 'supplier_reliability']
+original_categorical_features = ['season', 'item_category', 'supplier_reliability', 'item_category_essential', 'item_category_non-essential' , 'supplier_reliability_high', 'supplier_reliability_low']
 
 # Create input fields for each feature
 user_input_dict = {}
 
 # Create input fields for numerical features
-numerical_features = [col for col in feature_names if col.split('_')[0] not in original_categorical_features]
+# Filter out the one-hot encoded columns from feature_names to get only the original numerical features
+numerical_features = [col for col in feature_names if not any(col.startswith(cat + '_') for cat in original_categorical_features)]
+
 for feature in numerical_features:
     user_input_dict[feature] = st.number_input(f"Enter {feature}")
 
 # Create input fields for original categorical features with specific options
 categorical_input_dict = {}
-
 season_options = ['peak', 'off-peak']
 item_category_options = ['essential', 'non-essential']
 supplier_reliability_options = ['high', 'low']
 
-categorical_input_dict['season'] = st.selectbox("Enter season", season_options)
-categorical_input_dict['item_category'] = st.selectbox("Enter item category", item_category_options)
-categorical_input_dict['supplier_reliability'] = st.selectbox("Enter supplier reliability", supplier_reliability_options)
+categorical_input_dict['season'] = st.selectbox("Select season", season_options)
+categorical_input_dict['item_category'] = st.selectbox("Select item category", item_category_options)
+categorical_input_dict['supplier_reliability'] = st.selectbox("Select supplier reliability", supplier_reliability_options)
 
 
 if st.button("Predict Stock Status"):
