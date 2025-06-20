@@ -65,5 +65,4 @@ if st.button("Predict Stock Status"):
     # Output
     st.success(f"Predicted Stock Status: **{predicted_status}**")
 
-    st.markdown("### 📊 Your input:")
-    st.write(user_input_combined)
+    
