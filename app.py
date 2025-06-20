@@ -1,3 +1,5 @@
+import streamlit as st
+
 # Streamlit UI
 st.title("Stock Risk Prediction")
 st.write("Enter stock details, and we'll predict whether stock is overstocked or stockout.")
