@@ -1,4 +1,6 @@
 import streamlit as st
+import joblib
+import pandas as pd
 
 # Streamlit UI
 st.title("Stock Risk Prediction")
